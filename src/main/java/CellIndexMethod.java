@@ -1,22 +1,18 @@
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CellIndexMethod {
     private Map<Integer, Map<Integer, List<Particle>>> map;
     private List<Particle> particles;
-    private int rowCount;
+    private int matrixSize;
     private double rc;
     private boolean isPeriodic;
 
-    public CellIndexMethod(List<Particle> particles, int rowCount, double rc, boolean isPeriodic) {
+    public CellIndexMethod(List<Particle> particles, int matrixSize, double rc, boolean isPeriodic) {
         this.particles = particles;
         this.map = this.createCellMap(particles);
-        this.rowCount = rowCount;
+        this.matrixSize = matrixSize;
         this.rc = rc;
         this.isPeriodic = isPeriodic;
     }
@@ -32,7 +28,6 @@ public class CellIndexMethod {
                         .filter(p -> particle.getId() != p.getId() && particle.isNeighbour(isPeriodic, rc, p))
                         .collect(Collectors.toList()))
         );
-
         return particles;
     }
 
@@ -40,12 +35,12 @@ public class CellIndexMethod {
         List<Particle> particles = new ArrayList<>();
         int row, column;
 
-        for (row = 0; row < rowCount; row++) {
-            for (column = 0; column < rowCount; column++) {
+        for (row = 0; row < matrixSize; row++) {
+            for (column = 0; column < matrixSize; column++) {
                 List<Particle> inCellParticles = map.getOrDefault(row, new HashMap<>()).getOrDefault(column, new ArrayList<>());
 
                 if (!inCellParticles.isEmpty()) {
-                    List<Particle> adjacentCellParticles = this.getAdjacentCellsContent(row, column, isPeriodic);
+                    List<Particle> adjacentCellParticles = this.getAdjacentCellsContent(row, column);
 
                     for (Particle inCellParticle : inCellParticles) {
                         List<Particle> neighbours = Stream.concat(
@@ -61,40 +56,45 @@ public class CellIndexMethod {
             }
         }
 
-        for (row = 0; row < rowCount; row++) {
-            for (column = 0; column < rowCount; column++) {
+        for (row = 0; row < matrixSize; row++) {
+            for (column = 0; column < matrixSize; column++) {
                 particles.addAll(this.getParticlesInCell(row, column));
             }
         }
         return particles;
     }
 
-    private List<Particle> getAdjacentCellsContent(int row, int column, boolean isPeriodic) {
-        return isPeriodic ? this.getAdjacentCellsContentPeriodic(row, column) : this.getAdjacentCellsContentNonPeriodic(row, column);
-    }
-
-    private List<Particle> getAdjacentCellsContentNonPeriodic(int row, int column) {
+    private List<Particle> getAdjacentCellsContent(int row, int column) {
         List<Particle> adjParticles = new ArrayList<>();
 
-        if (row < rowCount - 1) {
-            adjParticles.addAll(this.getParticlesInCell(row + 1, column));
-        }
-        if (column < rowCount - 1) {
-            adjParticles.addAll(this.getParticlesInCell(row, column + 1));
-        }
-        if (row > 0) {
-            adjParticles.addAll(this.getParticlesInCell(row - 1, column));
-        }
-        if (row < rowCount - 1 && column < rowCount - 1) {
-            adjParticles.addAll(this.getParticlesInCell(row + 1, column + 1));
-        }
+        adjParticles.addAll(this.getAdjacentContent(row, column + 1));
+        adjParticles.addAll(this.getAdjacentContent(row + 1, column));
+        adjParticles.addAll(this.getAdjacentContent(row + 1, column + 1));
+        adjParticles.addAll(this.getAdjacentContent(row - 1, column + 1));
+
         return adjParticles;
     }
 
-    private List<Particle> getAdjacentCellsContentPeriodic(int row, int column) {
-        return null;
+    private List<Particle> getAdjacentContent(int row, int column) {
+        if (isPeriodic) {
+            if (row >= matrixSize) {
+                row = 0;
+            }
+            if (column >= matrixSize) {
+                column = 0;
+            }
+            if (row <= -1) {
+                row = matrixSize - 1;
+            }
+            if (column <= -1) {
+                column = matrixSize - 1;
+            }
+        } else if (row < 0 || row > matrixSize - 1 || column < 0 || column > matrixSize - 1) {
+            return Collections.emptyList();
+        }
+        return this.getParticlesInCell(row, column);
     }
-
+    
     private List<Particle> getParticlesInCell(int row, int col) {
         return map.getOrDefault(row, new HashMap<>()).getOrDefault(col, new ArrayList<>());
     }
