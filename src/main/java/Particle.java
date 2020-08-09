@@ -68,11 +68,19 @@ public class Particle implements Comparable<Particle>{
         return cellColumn;
     }
 
-    public boolean isNeighbour(double rc, Particle particle) {
+    public boolean isNeighbour(boolean isPeriodic, double rc, Particle particle) {
+        return isPeriodic ? this.isPeriodicNeighbour(rc, particle) : this.isNonPeriodicNeighbour(rc, particle);
+    }
+
+    public boolean isNonPeriodicNeighbour(double rc, Particle particle) {
         double xDistance = this.x - particle.getX();
         double yDistance = this.y - particle.getY();
         double distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance) - (this.radius + particle.getRadius());  //FIXME What to do with radius? esto es de centro a centro
         return distance <= rc;
+    }
+
+    public boolean isPeriodicNeighbour(double rc, Particle particle) {
+        return false;
     }
 
     @Override
