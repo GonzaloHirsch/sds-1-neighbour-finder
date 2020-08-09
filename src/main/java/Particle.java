@@ -24,6 +24,13 @@ public class Particle implements Comparable<Particle>{
         this.cellColumn = cellColumn;
     }
 
+    public Particle(int id, double radius, double property) {
+        this.id = id;
+        this.radius = radius;
+        this.property = property;
+        this.neighbours = new TreeSet<>();
+    }
+
     public int compareTo(Particle particle) {
         return 0;
     }
