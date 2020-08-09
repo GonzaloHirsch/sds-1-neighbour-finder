@@ -33,13 +33,11 @@ def generate_dynamic_file(filename, area_length, particle_total):
 
     f.close()
 
-def generate_files(index, area_length, particle_total):
-    generate_static_file('../test_files/static-' + str(index) + '.txt', area_length, particle_total)
-    generate_dynamic_file('../test_files/dynamic-' + str(index) + '.txt', area_length, particle_total)
+def generate_files(area_length, particle_total):
+    generate_static_file('../test_files/static-' + str(particle_total) + '.txt', area_length, particle_total)
+    generate_dynamic_file('../test_files/dynamic-' + str(particle_total) + '.txt', area_length, particle_total)
 
 particle_totals = [10, 20, 30, 40, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000]
 area_length = 20
-index = 0
 for total in particle_totals:
-    index += 1
-    generate_files(index, area_length, total)
+    generate_files(area_length, total)
