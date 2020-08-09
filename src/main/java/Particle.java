@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -31,40 +32,20 @@ public class Particle implements Comparable<Particle>{
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public double getX() {
         return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
     }
 
     public double getY() {
         return y;
     }
 
-    public void setY(double y) {
-        this.y = y;
-    }
-
     public double getRadius() {
         return radius;
     }
 
-    public void setRadius(double radius) {
-        this.radius = radius;
-    }
-
     public double getProperty() {
         return property;
-    }
-
-    public void setProperty(double property) {
-        this.property = property;
     }
 
     public Set<Particle> getNeighbours() {
@@ -75,20 +56,23 @@ public class Particle implements Comparable<Particle>{
         this.neighbours.add(neighbour);
     }
 
-    public int getCellRow() {
-        return cellRow;
+    public void addNeighbours(Collection<Particle> neighbours) {
+        this.neighbours.addAll(neighbours);
     }
 
-    public void setCellRow(int cellRow) {
-        this.cellRow = cellRow;
+    public int getCellRow() {
+        return cellRow;
     }
 
     public int getCellColumn() {
         return cellColumn;
     }
 
-    public void setCellColumn(int cellColumn) {
-        this.cellColumn = cellColumn;
+    public boolean isNeighbour(double rc, Particle particle) {
+        double xDistance = this.x - particle.getX();
+        double yDistance = this.y - particle.getY();
+        double distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance) - (this.radius + particle.getRadius());  //FIXME What to do with radius? esto es de centro a centro
+        return distance <= rc;
     }
 
     @Override
@@ -115,5 +99,33 @@ public class Particle implements Comparable<Particle>{
                 this.radius,
                 this.property
         );
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public void setProperty(double property) {
+        this.property = property;
+    }
+
+    public void setCellRow(int cellRow) {
+        this.cellRow = cellRow;
+    }
+
+    public void setCellColumn(int cellColumn) {
+        this.cellColumn = cellColumn;
     }
 }
