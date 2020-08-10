@@ -51,10 +51,8 @@ public class Main {
     private static void GenerateOutputFile(Collection<Particle> particles) {
         try {
             // Create the file to make sure it exists
-            new File(OUTPUT_FILE);
-
-            // Open the file for writing
-            OutputStream f = new FileOutputStream(OUTPUT_FILE);
+            File file = new File(OUTPUT_FILE);
+            FileWriter fr = new FileWriter(file, false);
 
             // StringBuilder to minimize file writes
             StringBuilder sb = new StringBuilder();
@@ -69,12 +67,8 @@ public class Main {
                 sb.append("\n");
             });
 
-            // Writing the content to the file
-            for (byte b : sb.toString().getBytes()) {
-                f.write(b);
-            }
-
-            f.close();
+            fr.write(sb.toString());
+            fr.close();
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
         } catch (IOException e) {
