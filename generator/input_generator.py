@@ -1,6 +1,6 @@
 from numpy import random
 
-def generate_static_file(filename, area_length, particle_total, particle_radius = 0.25):
+def generate_static_file(filename, particle_total, area_length, matrix_size, interaction_radius, particle_radius):
     f = open(filename, 'w')
 
     # Adding the particle total
@@ -8,6 +8,12 @@ def generate_static_file(filename, area_length, particle_total, particle_radius 
 
     # Adding area length
     f.write('{}\n'.format(area_length))
+
+    # Adding area length
+    f.write('{}\n'.format(matrix_size))
+
+    # Adding area length
+    f.write('{}\n'.format(interaction_radius))
 
     # Property not to be used, 0 as default
     prop = 0
@@ -18,7 +24,7 @@ def generate_static_file(filename, area_length, particle_total, particle_radius 
 
     f.close()
 
-def generate_dynamic_file(filename, area_length, particle_total):
+def generate_dynamic_file(filename, particle_total, area_length):
     f = open(filename, 'w')
 
     # We only work with time 0
@@ -33,11 +39,15 @@ def generate_dynamic_file(filename, area_length, particle_total):
 
     f.close()
 
-def generate_files(area_length, particle_total):
-    generate_static_file('../test_files/static-' + str(particle_total) + '.txt', area_length, particle_total)
-    generate_dynamic_file('../test_files/dynamic-' + str(particle_total) + '.txt', area_length, particle_total)
+def generate_files(particle_total, area_length, matrix_size, interaction_radius, particle_radius):
+    generate_static_file('../static.txt', particle_total, area_length, matrix_size, interaction_radius, particle_radius)
+    generate_dynamic_file('../dynamic.txt', particle_total, area_length)
 
-particle_totals = [10, 20, 30, 40, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 2000]
-area_length = 20
-for total in particle_totals:
-    generate_files(area_length, total)
+particle_total = int(input("Cantidad de particulas: "))
+area_length = float(input("Longitud del area de estudio: "))
+matrix_size = int(input("Cantidad de celdas de la matrix: "))
+interaction_radius = float(input("Radio de interacción: "))
+particle_radius = float(input("Radio de las particulas: "))
+
+generate_files(particle_total, area_length, matrix_size, interaction_radius, particle_radius)
+

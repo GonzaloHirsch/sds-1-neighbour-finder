@@ -21,6 +21,16 @@ public class ParticleParser {
     public static double areaLength;
 
     /**
+     * Amount of cells per side
+     */
+    public static int matrixSize;
+
+    /**
+     * Radius of particle interaction
+     */
+    public static double interactionRadius;
+
+    /**
      * Parses the files given with the static and dynamic information in order to create the particles
      *
      * @param staticFileName  File path for the static file
@@ -40,6 +50,12 @@ public class ParticleParser {
 
         // Parsing the length of the area
         areaLength = sc.nextDouble();
+
+        // Parsing the length of the area
+        matrixSize = sc.nextInt();
+
+        // Parsing the length of the area
+        interactionRadius = sc.nextDouble();
 
         for (int i = 0; i < particleCount; i++){
             // Parsing the radius

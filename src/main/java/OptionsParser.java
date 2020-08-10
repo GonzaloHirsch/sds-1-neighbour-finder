@@ -6,16 +6,12 @@ public class OptionsParser {
     protected static String dynamicFile;
     protected static boolean useBruteForce = false;
     protected static boolean usePeriodicBorders = false;
-    protected static double interactionRadius;
-    protected static int matrixSize;
 
-    private static String PARAM_H = "h";
-    private static String PARAM_M = "m";
-    private static String PARAM_RC = "rc";
-    private static String PARAM_SF = "sf";
-    private static String PARAM_DF = "df";
-    private static String PARAM_PB = "pb";
-    private static String PARAM_BF = "bf";
+    private static final String PARAM_H = "h";
+    private static final String PARAM_SF = "sf";
+    private static final String PARAM_DF = "df";
+    private static final String PARAM_PB = "pb";
+    private static final String PARAM_BF = "bf";
 
     /**
      * Generates the options for the help.
@@ -25,8 +21,6 @@ public class OptionsParser {
     private static Options GenerateOptions() {
         Options options = new Options();
         options.addOption(PARAM_H, "help", false, "Shows the system help.");
-        options.addOption(PARAM_M, "matrix", true, "Size of the square matrix to be used");
-        options.addOption(PARAM_RC, "radius", true, "Radius of interaction between particles");
         options.addOption(PARAM_SF, "static_file", true, "Path to the file with the static values.");
         options.addOption(PARAM_DF, "dynamic_file", true, "Path to the file with the dynamic values.");
         options.addOption(PARAM_PB, "periodic_border", false, "Enables periodic border conditions.");
@@ -53,16 +47,6 @@ public class OptionsParser {
             // Parsing the help
             if (cmd.hasOption(PARAM_H)){
                 help(options);
-            }
-
-            // Parsing the matrix size
-            if (cmd.hasOption(PARAM_M)){
-                matrixSize = Integer.parseInt(cmd.getOptionValue(PARAM_M));
-            }
-
-            // Parsing the interaction radius
-            if (cmd.hasOption(PARAM_RC)){
-                interactionRadius = Double.parseDouble(cmd.getOptionValue(PARAM_RC));
             }
 
             // Parsing the periodic border flag

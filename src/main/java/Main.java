@@ -11,14 +11,14 @@ public class Main {
 
         try {
             // Parsing the particles
-            ParticleParser.ParseParticles(OptionsParser.staticFile, OptionsParser.dynamicFile, OptionsParser.matrixSize);
+            ParticleParser.ParseParticles(OptionsParser.staticFile, OptionsParser.dynamicFile, ParticleParser.matrixSize);
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             System.exit(1);
         }
 
         // Creating the instance of the method
-        CellIndexMethod cim = new CellIndexMethod(ParticleParser.particleMap.values(), OptionsParser.matrixSize, ParticleParser.areaLength, OptionsParser.interactionRadius, OptionsParser.usePeriodicBorders);
+        CellIndexMethod cim = new CellIndexMethod(ParticleParser.particleMap.values(), ParticleParser.matrixSize, ParticleParser.areaLength, ParticleParser.interactionRadius, OptionsParser.usePeriodicBorders);
 
         long startTime = Instant.now().toEpochMilli();
 

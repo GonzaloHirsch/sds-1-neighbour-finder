@@ -3,12 +3,13 @@ import numpy
 
 particle_focus = int(input("Particula para enfocar: "))
 
+# Function to extract particle positions from the particle map
 def get_particle_positions(particle_map):
     X = []
     Y = []
     for value in particle_map.values():
-        X.append(float(value[0]))
-        Y.append(float(value[1]))
+        X.append(value[0])
+        Y.append(value[1])
     return X, Y
 
 def get_neighbour_particle_positions(neighbours, positions, properties, particle_focus):
@@ -16,15 +17,15 @@ def get_neighbour_particle_positions(neighbours, positions, properties, particle
     Y = []
     R = []
     for value in neighbours[particle_focus]:
-        X.append(float(positions[int(value)][0]))
-        Y.append(float(positions[int(value)][1]))
-        R.append(float(properties[int(value)][0]))
+        X.append(positions[value][0])
+        Y.append(positions[value][1])
+        R.append(properties[value][0])
     return X, Y, R
 
 def get_particle_radius(particle_map):
     R = []
     for value in particle_map.values():
-        R.append(float(value[0]))
+        R.append(value[0])
     return R
 
 def generate_circles(X, Y, R):
@@ -61,7 +62,7 @@ for line in sf:
     elif index == 3:
         interaction_radius = float(line.rstrip("\n"))
     else:
-        static_properties[index - 3] = line.rstrip("\n").split(" ")
+        static_properties[index - 3] = [ float(x) for x in line.rstrip("\n").split(" ")]
     index += 1
 
 df = open(DYNAMIC_FILE, "r")
@@ -71,7 +72,7 @@ positions = {}
 index = 0
 for line in df:
     if index > 0:
-        positions[index] = line.rstrip("\n").split(" ")
+        positions[index] = [float(x) for x in line.rstrip("\n").split(" ")]
     index += 1
 
 of = open(OUTPUT_FILE, "r")
@@ -82,7 +83,7 @@ index = 1
 for line in of:
     data = line.rstrip("\n").split(" ")
     if len(data) > 1:
-        neighbours[index] = data[1:]
+        neighbours[index] = [int(x) for x in data[1:]]
     else:
         neighbours[index] = []
     index += 1
@@ -92,7 +93,9 @@ X_neighbour, Y_neighbour, R_neighbour = get_neighbour_particle_positions(neighbo
 R = get_particle_radius(static_properties)
 circles = generate_circles(X, Y, R)
 neighbour_circles = generate_neighbour_circles(X_neighbour, Y_neighbour, R_neighbour)
-ticks = numpy.arange(0, area_length, area_length/matrix_size)
+
+# Add extra to the end border in order to get the last item included
+ticks = numpy.arange(0, area_length + ((area_length * 0.5)/matrix_size), area_length/matrix_size)
 
 fig, ax = plt.subplots(figsize=(7, 7))
 ax.set_xlim((0, area_length))
@@ -109,8 +112,8 @@ for circle in neighbour_circles:
 particle_focus_data = positions[particle_focus][0:2]
 particle_focus_radius = float(static_properties[particle_focus][0])
 
-circle_interaction_radius = plt.Circle((float(particle_focus_data[0]), float(particle_focus_data[1])), interaction_radius, fill=False, color='r')
-circle_focus_particle = plt.Circle((float(particle_focus_data[0]), float(particle_focus_data[1])), particle_focus_radius, color='r')
+circle_interaction_radius = plt.Circle((particle_focus_data[0], particle_focus_data[1]), interaction_radius + particle_focus_radius, fill=False, color='r')
+circle_focus_particle = plt.Circle((particle_focus_data[0], particle_focus_data[1]), particle_focus_radius, color='r')
 ax.add_artist(circle_interaction_radius)
 ax.add_artist(circle_focus_particle)
 plt.grid()
