@@ -81,3 +81,9 @@ test_files/
 output.txt
 
 target/
+
+ArchivosEjemplo/
+
+static.txt
+
+dynamic.txt
