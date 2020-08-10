@@ -19,3 +19,9 @@ or **python3** if using OSx
 ```
 python3 input_generator.py
 ```
+
+## Visualization
+Run in Octave the command:
+```
+visualize("../test_files/static-2000.txt", "../test_files/dynamic-2000.txt", "../output.txt", 5, 65)
+```
