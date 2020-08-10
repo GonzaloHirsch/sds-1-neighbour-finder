@@ -11,6 +11,16 @@ def get_particle_positions(particle_map):
         Y.append(float(value[1]))
     return X, Y
 
+def get_neighbour_particle_positions(neighbours, positions, properties, particle_focus):
+    X = []
+    Y = []
+    R = []
+    for value in neighbours[particle_focus]:
+        X.append(float(positions[int(value)][0]))
+        Y.append(float(positions[int(value)][1]))
+        R.append(float(properties[int(value)][0]))
+    return X, Y, R
+
 def get_particle_radius(particle_map):
     R = []
     for value in particle_map.values():
@@ -21,6 +31,13 @@ def generate_circles(X, Y, R):
     circles = []
     for index in range(len(X)):
         circles.append(plt.Circle((X[index], Y[index]), R[index], color='b', fill=False))
+        index += 1
+    return circles
+
+def generate_neighbour_circles(X, Y, R):
+    circles = []
+    for index in range(len(X)):
+        circles.append(plt.Circle((X[index], Y[index]), R[index], color='g', fill=True))
         index += 1
     return circles
 
@@ -68,10 +85,13 @@ for line in of:
         neighbours[index] = data[1:]
     else:
         neighbours[index] = []
+    index += 1
 
 X, Y = get_particle_positions(positions)
+X_neighbour, Y_neighbour, R_neighbour = get_neighbour_particle_positions(neighbours, positions, static_properties, particle_focus)
 R = get_particle_radius(static_properties)
 circles = generate_circles(X, Y, R)
+neighbour_circles = generate_neighbour_circles(X_neighbour, Y_neighbour, R_neighbour)
 ticks = numpy.arange(0, area_length, area_length/matrix_size)
 
 fig, ax = plt.subplots(figsize=(7, 7))
@@ -79,7 +99,11 @@ ax.set_xlim((0, area_length))
 ax.set_ylim((0, area_length))
 plt.xticks(ticks)
 plt.yticks(ticks)
+
 for circle in circles:
+    ax.add_artist(circle)
+
+for circle in neighbour_circles:
     ax.add_artist(circle)
 
 particle_focus_data = positions[particle_focus][0:2]
