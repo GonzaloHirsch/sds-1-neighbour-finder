@@ -100,6 +100,7 @@ public class Particle implements Comparable<Particle>{
     }
 
     public boolean isPeriodicNeighbour(double rc, Particle particle) {
+
         return false;
     }
 

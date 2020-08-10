@@ -40,13 +40,12 @@ public class CellIndexMethod {
                 List<Particle> inCellParticles = map.getOrDefault(row, new HashMap<>()).getOrDefault(column, new ArrayList<>());
 
                 if (!inCellParticles.isEmpty()) {
-                    List<Particle> adjacentCellParticles = this.getAdjacentCellsContent(row, column);
+                    List<Particle> adjacentParticles = this.getAdjacentCellsContent(row, column);
+                    adjacentParticles.addAll(inCellParticles);
 
                     for (Particle inCellParticle : inCellParticles) {
-                        List<Particle> neighbours = Stream.concat(
-                                inCellParticles.stream().filter(p -> inCellParticle.getId() != p.getId()),
-                                adjacentCellParticles.stream()
-                        ).filter(p -> inCellParticle.isNeighbour(isPeriodic, rc, p))
+                        List<Particle> neighbours = adjacentParticles.stream()
+                                .filter(p -> inCellParticle.getId() != p.getId() && inCellParticle.isNeighbour(isPeriodic, rc, p))
                                 .collect(Collectors.toList());
 
                         inCellParticle.addNeighbours(neighbours);
