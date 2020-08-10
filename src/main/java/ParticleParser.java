@@ -78,8 +78,8 @@ public class ParticleParser {
             p.setX(x);
             p.setY(y);
             // FIXME -> Use correct amount
-            p.setCellRow((int)Math.floor(x / matrixSize));
-            p.setCellColumn((int)Math.floor(y / matrixSize));
+            p.setCellRow((int)Math.floor(x / (areaLength / matrixSize)));
+            p.setCellColumn((int)Math.floor(y / (areaLength / matrixSize)));
             particleMap.put(p.getId(), p);
         }
     }
