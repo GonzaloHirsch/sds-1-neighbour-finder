@@ -37,7 +37,7 @@ public class Particle implements Comparable<Particle>{
     }
 
     public int compareTo(Particle particle) {
-        return id - particle.getId();
+        return Integer.compare(id, particle.getId());
     }
 
     public int getId() {

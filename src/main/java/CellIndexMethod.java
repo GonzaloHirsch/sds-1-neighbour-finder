@@ -61,6 +61,8 @@ public class CellIndexMethod {
                 particles.addAll(this.getParticlesInCell(row, column));
             }
         }
+
+        particles.sort(Particle::compareTo);
         return particles;
     }
 
@@ -94,7 +96,7 @@ public class CellIndexMethod {
         }
         return this.getParticlesInCell(row, column);
     }
-    
+
     private List<Particle> getParticlesInCell(int row, int col) {
         return map.getOrDefault(row, new HashMap<>()).getOrDefault(col, new ArrayList<>());
     }
