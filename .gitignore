@@ -78,12 +78,8 @@ sds-tp1.iml
 
 test_files/
 
-output.txt
-
 target/
 
 ArchivosEjemplo/
 
-static.txt
-
-dynamic.txt
+*.txt

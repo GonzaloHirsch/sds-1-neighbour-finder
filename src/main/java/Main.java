@@ -1,9 +1,13 @@
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.Collection;
 
 public class Main {
     private static String OUTPUT_FILE = "./output.txt";
+    private static String STAT_FILE = "./statistics.txt";
 
     public static void main(String[] args) {
         // Parsing the options
@@ -38,9 +42,33 @@ public class Main {
                 endTime - startTime,
                 ParticleParser.particleCount
         );
+        // Generate stats file
+        GenerateStatFile(endTime - startTime, OptionsParser.useBruteForce, ParticleParser.particleCount, ParticleParser.matrixSize, OptionsParser.usePeriodicBorders);
 
         // Generate the output file
         GenerateOutputFile(particles);
+    }
+
+    /**
+     * Generates the statistics file
+     *
+     * @param executionTime Duration of the execution of the program in milliseconds
+     * @param useBruteForce Boolean which identifies which method was used -> brute force or CMI
+     * @param particleCount Amount of particles analyzed
+     * @param matrixSize If CMI was used, indicates the n of the nxn matrix created
+     * @param usePeriodicBorders Indicates if the neighbour analysis was done considering or not borders
+     */
+    private static void GenerateStatFile(long executionTime, boolean useBruteForce, int particleCount, int matrixSize, boolean usePeriodicBorders) {
+        try {
+            String sf = String.format("%s %d %d %d\n", useBruteForce ? "BF" : "CMI", matrixSize, particleCount, executionTime);
+            Files.write(Paths.get(STAT_FILE), sf.getBytes(), StandardOpenOption.APPEND);
+
+        } catch (FileNotFoundException e) {
+            System.out.println(STAT_FILE + " not found");
+        } catch (IOException e) {
+            System.out.println("Error writing to the output file");
+        }
+
     }
 
     /**
@@ -81,4 +109,6 @@ public class Main {
             System.out.println("Error writing to the output file");
         }
     }
+
+
 }
