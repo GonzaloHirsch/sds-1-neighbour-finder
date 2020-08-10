@@ -64,7 +64,7 @@ public class Main {
                 sb.append(particle.getId());
                 particle.getNeighbours().forEach(neighbour -> {
                     sb.append(" ");
-                    sb.append(particle.getId());
+                    sb.append(neighbour.getId());
                 });
                 sb.append("\n");
             });
