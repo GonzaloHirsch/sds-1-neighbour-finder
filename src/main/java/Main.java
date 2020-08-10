@@ -18,7 +18,7 @@ public class Main {
         }
 
         // Creating the instance of the method
-        CellIndexMethod cim = new CellIndexMethod(ParticleParser.particleMap.values(), OptionsParser.matrixSize, OptionsParser.interactionRadius, OptionsParser.usePeriodicBorders);
+        CellIndexMethod cim = new CellIndexMethod(ParticleParser.particleMap.values(), OptionsParser.matrixSize, ParticleParser.areaLength, OptionsParser.interactionRadius, OptionsParser.usePeriodicBorders);
 
         long startTime = Instant.now().toEpochMilli();
 

@@ -88,20 +88,26 @@ public class Particle implements Comparable<Particle>{
         return cellColumn;
     }
 
-    public boolean isNeighbour(boolean isPeriodic, double rc, Particle particle) {
-        return isPeriodic ? this.isPeriodicNeighbour(rc, particle) : this.isNonPeriodicNeighbour(rc, particle);
+    public double getDistanceFrom(Particle particle) {
+        double distX = this.x - particle.getX();
+        double distY = this.y - particle.getY();
+        return Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2)) - (this.radius + particle.getRadius());  //FIXME What to do with radius? esto es de centro a centro
     }
 
-    public boolean isNonPeriodicNeighbour(double rc, Particle particle) {
-        double xDistance = this.x - particle.getX();
-        double yDistance = this.y - particle.getY();
-        double distance = Math.sqrt(xDistance * xDistance + yDistance * yDistance) - (this.radius + particle.getRadius());  //FIXME What to do with radius? esto es de centro a centro
-        return distance <= rc;
-    }
+    public double getPeriodicDistanceFrom(Particle particle, double totalLength) {
+        double distX = Math.abs(this.x - particle.getX());
+        double distY = Math.abs(this.y - particle.getY());
 
-    public boolean isPeriodicNeighbour(double rc, Particle particle) {
-
-        return false;
+        /* If the length between them is larger than that of half the area, then the
+         * periodic distance will be shorter.
+         */
+        if (distX > totalLength / 2) {
+            distX = totalLength - distX;
+        }
+        if (distY > totalLength / 2) {
+            distY = totalLength - distY;
+        }
+        return Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2)) - (this.radius + particle.getRadius());  //FIXME What to do with radius? esto es de centro a centro
     }
 
     @Override
