@@ -20,6 +20,15 @@ or **python3** if using OSx
 python3 input_generator.py
 ```
 
+## Simulation
+Run the command:
+```
+mvn clean package
+```
+```
+java -jar ./target/sds-tp1-1.0-SNAPSHOT-jar-with-dependencies.jar -sf ./test_files/static-2000.txt -df ./test_files/dynamic-2000.txt -rc 1 -m 10
+```
+
 ## Visualization
 Run in Octave the command:
 ```
