@@ -1,6 +1,6 @@
 import java.io.*;
 import java.time.Instant;
-import java.util.List;
+import java.util.Collection;
 
 public class Main {
     private static String OUTPUT_FILE = "./output.txt";
@@ -11,16 +11,26 @@ public class Main {
 
         try {
             // Parsing the particles
-            ParticleParser.ParseParticles(OptionsParser.staticFile, OptionsParser.dynamicFile);
+            ParticleParser.ParseParticles(OptionsParser.staticFile, OptionsParser.dynamicFile, OptionsParser.matrixSize);
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             System.exit(1);
         }
 
+        // Creating the instance of the method
+        CellIndexMethod cim = new CellIndexMethod(ParticleParser.particleMap.values(), OptionsParser.matrixSize, OptionsParser.interactionRadius, OptionsParser.usePeriodicBorders);
+
         long startTime = Instant.now().toEpochMilli();
 
-        List<Particle> particles = null;
+        // Calculating the neighbours
+        Collection<Particle> particles;
+        if (OptionsParser.useBruteForce){
+            particles = cim.solveBruteForce();
+        } else {
+            particles = cim.solveOptimized();
+        }
 
+        // Printing the result time
         long endTime = Instant.now().toEpochMilli();
         System.out.format("[%s + %s] Time = %d | Particles = %d\n",
                 OptionsParser.useBruteForce ? "Brute Force": "Cell Index Method",
@@ -38,7 +48,7 @@ public class Main {
      *
      * @param particles List of particles, in order by id, to be written in the output file
      */
-    private static void GenerateOutputFile(List<Particle> particles) {
+    private static void GenerateOutputFile(Collection<Particle> particles) {
         try {
             // Create the file to make sure it exists
             new File(OUTPUT_FILE);

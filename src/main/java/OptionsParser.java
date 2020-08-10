@@ -67,12 +67,12 @@ public class OptionsParser {
 
             // Parsing the periodic border flag
             if (cmd.hasOption(PARAM_PB)){
-                usePeriodicBorders = Boolean.parseBoolean(cmd.getOptionValue(PARAM_PB));
+                usePeriodicBorders = true;
             }
 
             // Parsing the brute force flag
             if (cmd.hasOption(PARAM_BF)){
-                useBruteForce = Boolean.parseBoolean(cmd.getOptionValue(PARAM_BF));
+                useBruteForce = true;
             }
 
             // Checking if the files were present
