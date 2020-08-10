@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -13,7 +14,7 @@ public class ParticleParser {
     /**
      * List with all the parsed particles
      */
-    public static Map<Integer, Particle> particleMap;
+    public static Map<Integer, Particle> particleMap = new HashMap<>();
     /**
      * Length of the area of the particles
      */
@@ -25,9 +26,9 @@ public class ParticleParser {
      * @param staticFileName  File path for the static file
      * @param dynamicFileName File path for the dynamic file
      */
-    public static void ParseParticles(String staticFileName, String dynamicFileName) throws FileNotFoundException {
+    public static void ParseParticles(String staticFileName, String dynamicFileName, int matrixSize) throws FileNotFoundException {
         ParseStaticData(staticFileName);
-        ParseDynamicData(dynamicFileName);
+        ParseDynamicData(dynamicFileName, matrixSize);
     }
 
     private static void ParseStaticData(String staticFileName) throws FileNotFoundException {
@@ -52,7 +53,7 @@ public class ParticleParser {
         }
     }
 
-    private static void ParseDynamicData(String dynamicFileName) throws FileNotFoundException {
+    private static void ParseDynamicData(String dynamicFileName, int matrixSize) throws FileNotFoundException {
         File file = new File(dynamicFileName);
         Scanner sc = new Scanner(file);
 
@@ -77,8 +78,8 @@ public class ParticleParser {
             p.setX(x);
             p.setY(y);
             // FIXME -> Use correct amount
-            p.setCellRow((int)Math.floor(x));
-            p.setCellColumn((int)Math.floor(y));
+            p.setCellRow((int)Math.floor(x / matrixSize));
+            p.setCellColumn((int)Math.floor(y / matrixSize));
             particleMap.put(p.getId(), p);
         }
     }

@@ -4,12 +4,12 @@ import java.util.stream.Stream;
 
 public class CellIndexMethod {
     private Map<Integer, Map<Integer, List<Particle>>> map;
-    private List<Particle> particles;
+    private Collection<Particle> particles;
     private int matrixSize;
     private double rc;
     private boolean isPeriodic;
 
-    public CellIndexMethod(List<Particle> particles, int matrixSize, double rc, boolean isPeriodic) {
+    public CellIndexMethod(Collection<Particle> particles, int matrixSize, double rc, boolean isPeriodic) {
         this.particles = particles;
         this.map = this.createCellMap(particles);
         this.matrixSize = matrixSize;
@@ -17,12 +17,12 @@ public class CellIndexMethod {
         this.isPeriodic = isPeriodic;
     }
 
-    private Map<Integer, Map<Integer, List<Particle>>> createCellMap(List<Particle> particles) {
+    private Map<Integer, Map<Integer, List<Particle>>> createCellMap(Collection<Particle> particles) {
         return particles.stream()
                 .collect(Collectors.groupingBy(Particle::getCellRow, Collectors.groupingBy(Particle::getCellColumn)));
     }
 
-    public List<Particle> solveBruteForce() {
+    public Collection<Particle> solveBruteForce() {
         this.particles.forEach(particle -> particle.addNeighbours(
                 particles.stream()
                         .filter(p -> particle.getId() != p.getId() && particle.isNeighbour(isPeriodic, rc, p))
