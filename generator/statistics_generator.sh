@@ -20,7 +20,7 @@ do
     cat generator/variables_generator | python generator/input_generator.py
     for num in {1..10}
     do
-      java -jar ./target/sds-tp1-1.0-SNAPSHOT-jar-with-dependencies.jar -sf ./static.txt -df ./dynamic.txt -pb
+      java -jar ./target/sds-tp1-1.0-SNAPSHOT-jar-with-dependencies.jar -sf ./static.txt -df ./dynamic.txt -pb -bf
     done
 done
 echo All done

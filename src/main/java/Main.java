@@ -43,7 +43,7 @@ public class Main {
                 ParticleParser.particleCount
         );
         // Generate stats file
-        GenerateStatFile(endTime - startTime, OptionsParser.useBruteForce, ParticleParser.particleCount, ParticleParser.matrixSize, OptionsParser.usePeriodicBorders);
+        // GenerateStatFile(endTime - startTime, OptionsParser.useBruteForce, ParticleParser.particleCount, ParticleParser.matrixSize, OptionsParser.usePeriodicBorders);
 
         // Generate the output file
         GenerateOutputFile(particles);

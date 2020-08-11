@@ -56,17 +56,18 @@ for method in method_stats:
             std = calculateTimeSD(method_stats[method][M][N], mean)
             method_stats[method][M][N] = {'mean': mean, 'std': std}
 
-# Set the x axis label
-plt.xlabel('Number of Particles')
-# Set the y axis label
-plt.ylabel('Average execution time (ms)')
-
-
 for method in method_stats:
+    plt.clf()
+
+    # Set the x axis label
+    plt.xlabel('Number of Particles')
+    # Set the y axis label
+    plt.ylabel('Average execution time (ms)')
+
     #Plotting every M line for a given method
     for M in method_stats[method]:
         # Set a title of the current graph.
-        plt.title('Execution time based on particle count using ' + method)
+        plt.title('Execution time based on particle count using ' + method + ' and periodic borders')
 
         #Retrieving the data for the given M
         particles, times, stds = pointsGivenMatrixSize(method_stats[method][M])
@@ -74,11 +75,14 @@ for method in method_stats:
         #Sorting the data so the line is correctly drawn
         particles, times, stds = zip(*sorted(zip(particles, times, stds)))
         #Plotting the line
-        plt.plot(particles, times)
+        label = 'M = ' + str(M)
+        plt.plot(particles, times, label=label)
+
         #Labelling the lines with the M value
         if method == 'CMI':
-            plt.text(particles[0] + 15, times[0] - 5, 'M = ' + str(M))
+            plt.legend()
 
         plt.errorbar(particles, times, yerr=stds, fmt='o', color='black',
                      ecolor='lightgray', elinewidth=3, capsize=0);
+
     plt.savefig(method + '.png')
