@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import statistics
+import itertools
 import numpy
 
 def calculateTimeMean(times):
@@ -57,15 +58,30 @@ for method in method_stats:
 
 print(method_stats)
 
-particles, means, stds = pointsGivenMatrixSize(method_stats['BF'][10])
+particles, times, stds = pointsGivenMatrixSize(method_stats['BF'][10])
 
 # Set the x axis label
 plt.xlabel('Number of Particles')
 # Set the y axis label
 plt.ylabel('Average execution time (ms)')
-# Set a title of the current axes.
-plt.title('Execution time based on particle count')
 
-plt.errorbar(particles, means, yerr=stds, fmt='o', color='black',
-             ecolor='lightgray', elinewidth=3, capsize=0);
-plt.show()
+
+for method in method_stats:
+    #Plotting every M line for a given method
+    for M in method_stats[method]:
+        # Set a title of the current graph.
+        plt.title('Execution time based on particle count using ' + method)
+
+        #Retrieving the data for the given M
+        particles, times, stds = pointsGivenMatrixSize(method_stats[method][M])
+
+        #Sorting the data so the line is correctly drawn
+        particles, times, stds = zip(*sorted(zip(particles, times, stds)))
+        #Plotting the line
+        plt.plot(particles, times)
+        #Labelling the lines with the M value
+        plt.text(particles[0] + 15, times[0] - 5, 'M = ' + str(M))
+
+        plt.errorbar(particles, times, yerr=stds, fmt='o', color='black',
+                     ecolor='lightgray', elinewidth=3, capsize=0);
+    plt.savefig(method + '.png')
