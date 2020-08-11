@@ -15,7 +15,7 @@ public class Main {
 
         try {
             // Parsing the particles
-            ParticleParser.ParseParticles(OptionsParser.staticFile, OptionsParser.dynamicFile, ParticleParser.matrixSize);
+            ParticleParser.ParseParticles(OptionsParser.staticFile, OptionsParser.dynamicFile);
         } catch (FileNotFoundException e) {
             System.out.println("File not found");
             System.exit(1);

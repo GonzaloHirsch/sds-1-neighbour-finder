@@ -25,7 +25,7 @@ def pointsGivenMatrixSize(time_data):
     return particles, means, stds
 
 
-STAT_FILE = "../statistics.txt"
+STAT_FILE = "./statistics.txt"
 
 sf = open(STAT_FILE, "r")
 
@@ -56,10 +56,6 @@ for method in method_stats:
             std = calculateTimeSD(method_stats[method][M][N], mean)
             method_stats[method][M][N] = {'mean': mean, 'std': std}
 
-print(method_stats)
-
-particles, times, stds = pointsGivenMatrixSize(method_stats['BF'][10])
-
 # Set the x axis label
 plt.xlabel('Number of Particles')
 # Set the y axis label
@@ -80,7 +76,8 @@ for method in method_stats:
         #Plotting the line
         plt.plot(particles, times)
         #Labelling the lines with the M value
-        plt.text(particles[0] + 15, times[0] - 5, 'M = ' + str(M))
+        if method == 'CMI':
+            plt.text(particles[0] + 15, times[0] - 5, 'M = ' + str(M))
 
         plt.errorbar(particles, times, yerr=stds, fmt='o', color='black',
                      ecolor='lightgray', elinewidth=3, capsize=0);

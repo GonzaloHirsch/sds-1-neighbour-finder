@@ -102,9 +102,9 @@ def generate_focus_circles(x, y, r, area_length):
     circles.append(plt.Circle((x + area_length, y), r, color='r'))
     return circles
 
-STATIC_FILE = "../static.txt"
-DYNAMIC_FILE = "../dynamic.txt"
-OUTPUT_FILE = "../output.txt"
+STATIC_FILE = "./static.txt"
+DYNAMIC_FILE = "./dynamic.txt"
+OUTPUT_FILE = "./output.txt"
 NEIGHBOUR_BORDER_COLOR = "#204a08"
 
 sf = open(STATIC_FILE, "r")

@@ -40,8 +40,8 @@ def generate_dynamic_file(filename, particle_total, area_length):
     f.close()
 
 def generate_files(particle_total, area_length, matrix_size, interaction_radius, particle_radius):
-    generate_static_file('../static.txt', particle_total, area_length, matrix_size, interaction_radius, particle_radius)
-    generate_dynamic_file('../dynamic.txt', particle_total, area_length)
+    generate_static_file('./static.txt', particle_total, area_length, matrix_size, interaction_radius, particle_radius)
+    generate_dynamic_file('./dynamic.txt', particle_total, area_length)
 
 particle_total = int(input("Cantidad de particulas: "))
 area_length = float(input("Longitud del area de estudio: "))

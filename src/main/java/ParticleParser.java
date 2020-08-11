@@ -36,9 +36,9 @@ public class ParticleParser {
      * @param staticFileName  File path for the static file
      * @param dynamicFileName File path for the dynamic file
      */
-    public static void ParseParticles(String staticFileName, String dynamicFileName, int matrixSize) throws FileNotFoundException {
+    public static void ParseParticles(String staticFileName, String dynamicFileName) throws FileNotFoundException {
         ParseStaticData(staticFileName);
-        ParseDynamicData(dynamicFileName, matrixSize);
+        ParseDynamicData(dynamicFileName);
     }
 
     private static void ParseStaticData(String staticFileName) throws FileNotFoundException {
@@ -69,7 +69,7 @@ public class ParticleParser {
         }
     }
 
-    private static void ParseDynamicData(String dynamicFileName, int matrixSize) throws FileNotFoundException {
+    private static void ParseDynamicData(String dynamicFileName) throws FileNotFoundException {
         File file = new File(dynamicFileName);
         Scanner sc = new Scanner(file);
 
