@@ -2,6 +2,11 @@ import matplotlib.pyplot as plt
 import numpy
 
 particle_focus = int(input("Particula para enfocar: "))
+periodic_borders = input("Periodic borders(y/n): ")
+if periodic_borders == "y":
+    periodic_borders = True
+else:
+    periodic_borders = False
 
 # Function to extract particle positions from the particle map
 def get_particle_positions(particle_map):
@@ -37,7 +42,7 @@ def generate_circles(X, Y, R):
         index += 1
     return circles
 
-def generate_neighbour_circles(X, Y, R, area_length):
+def generate_neighbour_circles_pb(X, Y, R, area_length):
     circles = []
     for index in range(len(X)):
         circles.append(plt.Circle((X[index], Y[index]), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
@@ -60,7 +65,7 @@ def generate_neighbour_circles(X, Y, R, area_length):
         index += 1
     return circles
 
-def generate_interaction_radius_circles(x, y, r, area_length):
+def generate_interaction_radius_circles_pb(x, y, r, area_length):
     circles = []
     circles.append(plt.Circle((x, y), r, fill=False, color='r'))
     # Covers top right case
@@ -81,7 +86,7 @@ def generate_interaction_radius_circles(x, y, r, area_length):
     circles.append(plt.Circle((x + area_length, y), r, fill=False, color='r'))
     return circles
 
-def generate_focus_circles(x, y, r, area_length):
+def generate_focus_circles_pb(x, y, r, area_length):
     circles = []
     circles.append(plt.Circle((x, y), r, color='r'))
     # Covers top right case
@@ -101,6 +106,24 @@ def generate_focus_circles(x, y, r, area_length):
     circles.append(plt.Circle((x, y + area_length), r, color='r'))
     circles.append(plt.Circle((x + area_length, y), r, color='r'))
     return circles
+
+def generate_focus_circles(x, y, r, area_length):
+    circles = []
+    circles.append(plt.Circle((x, y), r, color='r'))
+    return circles
+
+def generate_interaction_radius_circles(x, y, r, area_length):
+    circles = []
+    circles.append(plt.Circle((x, y), r, fill=False, color='r'))
+    return circles
+
+def generate_neighbour_circles(X, Y, R, area_length):
+    circles = []
+    for index in range(len(X)):
+        circles.append(plt.Circle((X[index], Y[index]), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        index += 1
+    return circles
+
 
 STATIC_FILE = "./static.txt"
 DYNAMIC_FILE = "./dynamic.txt"
@@ -152,8 +175,11 @@ X, Y = get_particle_positions(positions)
 X_neighbour, Y_neighbour, R_neighbour = get_neighbour_particle_positions(neighbours, positions, static_properties, particle_focus)
 R = get_particle_radius(static_properties)
 circles = generate_circles(X, Y, R)
-neighbour_circles = generate_neighbour_circles(X_neighbour, Y_neighbour, R_neighbour, area_length)
-
+if periodic_borders:
+    neighbour_circles = generate_neighbour_circles_pb(X_neighbour, Y_neighbour, R_neighbour, area_length)
+else:
+    neighbour_circles = generate_neighbour_circles(X_neighbour, Y_neighbour, R_neighbour, area_length)
+    
 # Add extra to the end border in order to get the last item included
 ticks = numpy.arange(0, area_length + ((area_length * 0.5)/matrix_size), area_length/matrix_size)
 
@@ -172,12 +198,21 @@ for circle in neighbour_circles:
 particle_focus_data = positions[particle_focus][0:2]
 particle_focus_radius = float(static_properties[particle_focus][0])
 
-interaction_radius_circles = generate_interaction_radius_circles(particle_focus_data[0], particle_focus_data[1], interaction_radius + particle_focus_radius, area_length)
+# Interaction radius
+if periodic_borders:
+    interaction_radius_circles = generate_interaction_radius_circles_pb(particle_focus_data[0], particle_focus_data[1], interaction_radius + particle_focus_radius, area_length)
+else:
+    interaction_radius_circles = generate_interaction_radius_circles(particle_focus_data[0], particle_focus_data[1], interaction_radius + particle_focus_radius, area_length)
 for circle in interaction_radius_circles:
     ax.add_artist(circle)
 
-generate_focus_circles = generate_focus_circles(particle_focus_data[0], particle_focus_data[1], particle_focus_radius, area_length)
+# Particle being focused
+if periodic_borders:
+    generate_focus_circles = generate_focus_circles_pb(particle_focus_data[0], particle_focus_data[1], particle_focus_radius, area_length)
+else:
+    generate_focus_circles = generate_focus_circles(particle_focus_data[0], particle_focus_data[1], particle_focus_radius, area_length)
 for circle in generate_focus_circles:
     ax.add_artist(circle)
+
 plt.grid()
 plt.show()
