@@ -25,47 +25,63 @@ def get_neighbour_particle_positions(neighbours, positions, properties, particle
     for value in neighbours[particle_focus]:
         X.append(positions[value][0])
         Y.append(positions[value][1])
-        R.append(properties[value][0])
+        if properties[value][0] > 0:
+            R.append(properties[value][0])
+        else:
+            R.append(0.05)
     return X, Y, R
 
 # Function to extract the radius from
 def get_particle_radius(particle_map):
     R = []
     for value in particle_map.values():
-        R.append(value[0])
+        if value[0] > 0:
+            R.append(value[0])
+        else:
+            R.append(0.05)
     return R
 
 def generate_circles(X, Y, R):
     circles = []
     for index in range(len(X)):
-        circles.append(plt.Circle((X[index], Y[index]), R[index], color='b', fill=False))
+        if R[index] > 0:
+            r = R[index]
+        else:
+            r = 0.05
+        circles.append(plt.Circle((X[index], Y[index]), r, color='b', fill=False))
         index += 1
     return circles
 
 def generate_neighbour_circles_pb(X, Y, R, area_length):
     circles = []
     for index in range(len(X)):
-        circles.append(plt.Circle((X[index], Y[index]), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        if R[index] > 0:
+            r = R[index]
+        else:
+            r = 0.05
+        circles.append(plt.Circle((X[index], Y[index]), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
         # Covers the top right case
-        circles.append(plt.Circle((X[index] - area_length, Y[index] - area_length), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
-        circles.append(plt.Circle((X[index], Y[index] - area_length), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
-        circles.append(plt.Circle((X[index] - area_length, Y[index]), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index] - area_length, Y[index] - area_length), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index], Y[index] - area_length), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index] - area_length, Y[index]), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
         # Covers top left case
-        circles.append(plt.Circle((X[index] + area_length, Y[index] - area_length), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
-        circles.append(plt.Circle((X[index], Y[index] - area_length), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
-        circles.append(plt.Circle((X[index] + area_length, Y[index]), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index] + area_length, Y[index] - area_length), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index], Y[index] - area_length), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index] + area_length, Y[index]), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
         # Covers bottom right case
-        circles.append(plt.Circle((X[index] - area_length, Y[index] + area_length), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
-        circles.append(plt.Circle((X[index], Y[index] + area_length), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
-        circles.append(plt.Circle((X[index] - area_length, Y[index]), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index] - area_length, Y[index] + area_length), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index], Y[index] + area_length), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index] - area_length, Y[index]), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
         # Covers bottom left case
-        circles.append(plt.Circle((X[index] + area_length, Y[index] + area_length), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
-        circles.append(plt.Circle((X[index], Y[index] + area_length), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
-        circles.append(plt.Circle((X[index] + area_length, Y[index]), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index] + area_length, Y[index] + area_length), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index], Y[index] + area_length), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        circles.append(plt.Circle((X[index] + area_length, Y[index]), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
         index += 1
     return circles
 
 def generate_interaction_radius_circles_pb(x, y, r, area_length):
+    if r == 0:
+        r = 0.05
     circles = []
     circles.append(plt.Circle((x, y), r, fill=False, color='r'))
     # Covers top right case
@@ -87,6 +103,8 @@ def generate_interaction_radius_circles_pb(x, y, r, area_length):
     return circles
 
 def generate_focus_circles_pb(x, y, r, area_length):
+    if r == 0:
+        r = 0.05
     circles = []
     circles.append(plt.Circle((x, y), r, color='r'))
     # Covers top right case
@@ -108,11 +126,15 @@ def generate_focus_circles_pb(x, y, r, area_length):
     return circles
 
 def generate_focus_circles(x, y, r, area_length):
+    if r == 0:
+        r = 0.05
     circles = []
     circles.append(plt.Circle((x, y), r, color='r'))
     return circles
 
 def generate_interaction_radius_circles(x, y, r, area_length):
+    if r == 0:
+        r = 0.05
     circles = []
     circles.append(plt.Circle((x, y), r, fill=False, color='r'))
     return circles
@@ -120,7 +142,11 @@ def generate_interaction_radius_circles(x, y, r, area_length):
 def generate_neighbour_circles(X, Y, R, area_length):
     circles = []
     for index in range(len(X)):
-        circles.append(plt.Circle((X[index], Y[index]), R[index], facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
+        if R[index] > 0:
+            r = R[index]
+        else:
+            r = 0.05
+        circles.append(plt.Circle((X[index], Y[index]), r, facecolor='g', fill=True, edgecolor=NEIGHBOUR_BORDER_COLOR))
         index += 1
     return circles
 
