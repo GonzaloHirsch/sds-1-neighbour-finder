@@ -1,4 +1,5 @@
 from numpy import random
+import math
 
 def generate_static_file(filename, particle_total, area_length, matrix_size, interaction_radius, particle_radius):
     f = open(filename, 'w')
@@ -49,5 +50,11 @@ matrix_size = int(input("Cantidad de celdas de la matrix: "))
 interaction_radius = float(input("Radio de interacción: "))
 particle_radius = float(input("Radio de las particulas: "))
 
-generate_files(particle_total, area_length, matrix_size, interaction_radius, particle_radius)
-
+if (area_length/matrix_size) > (interaction_radius + 2 * (particle_radius)):
+    generate_files(particle_total, area_length, matrix_size, interaction_radius, particle_radius)
+else:
+    ideal_m = math.floor((area_length / (interaction_radius + 2 * (particle_radius))))
+    if (area_length / (interaction_radius + 2 * (particle_radius))) == ideal_m:
+        ideal_m -= 1
+    print("Los parámetros dados no satisfacen la condición L/M > Rc + 2 * radioMaximo")
+    print("El mayor M que cumple la condicion es", ideal_m)

@@ -45,6 +45,9 @@ public class ParticleParser {
         File file = new File(staticFileName);
         Scanner sc = new Scanner(file);
 
+        // Variable for max radius
+        double maxRadius = 0;
+
         // Parsing the particle count
         particleCount = sc.nextInt();
 
@@ -66,6 +69,17 @@ public class ParticleParser {
 
             // Creating and adding a new particle to the map
             particleMap.put(i + 1, new Particle(i + 1, radius, property));
+
+            // Obtaining the max radius
+            maxRadius = Math.max(radius, maxRadius);
+        }
+
+        double idealM = Math.floor((areaLength)/(interactionRadius + 2 * maxRadius));
+        if (idealM == (areaLength)/(interactionRadius + 2 * maxRadius)){
+            idealM -= 1;
+        }
+        if ((areaLength/matrixSize) <= (interactionRadius + 2 * maxRadius)){
+            throw new RuntimeException("Los parámetros dados no cumplen la condición (L/M)>Rc + 2 * rMax, el M ideal en este caso sería " + String.valueOf((int)idealM));
         }
     }
 
