@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy
 
 particle_focus = int(input("Particula para enfocar: "))
-periodic_borders = input("Periodic borders(y/n): ")
+periodic_borders = input("Bordes periodicos(y/n): ")
 if periodic_borders == "y":
     periodic_borders = True
 else:
@@ -214,5 +214,6 @@ else:
 for circle in generate_focus_circles:
     ax.add_artist(circle)
 
+fig.suptitle('Particula ' + str(particle_focus) + " con " + str(len(R_neighbour)) + " vecinos", fontsize=16)
 plt.grid()
 plt.show()
